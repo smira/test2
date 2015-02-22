@@ -3,5 +3,5 @@ all: env
 
 env:
 	virtualenv env
-	. env/bin/activate && pip install Twisted
+	. env/bin/activate && pip install Twisted requests
 

@@ -1,3 +1,8 @@
+"""
+Web service implementing simple publish/subscribe (probably
+more like producer/consumer) protocol.
+"""
+
 import collections
 
 from twisted.web.server import Site
@@ -6,6 +11,10 @@ from twisted.internet import reactor
 
 
 class SubscriptionService(object):
+    """
+    Factory: tracks created user and topics
+    objects, makes them single instance (by name).
+    """
     def __init__(self):
         self._topics = {}
         self._users = {}
@@ -24,6 +33,10 @@ class SubscriptionService(object):
 
 
 class User(object):
+    """
+    User has number of mailboxes (queues)
+    for each of the subscriptions.
+    """
     def __init__(self, name):
         self.name = name
         self._mailboxes = {}
@@ -42,6 +55,10 @@ class User(object):
 
 
 class Topic(object):
+    """
+    Topic tracks list of users who have
+    subscribed for that topic.
+    """
     def __init__(self, name):
         self.name = name
         self.subscriptions = set()
@@ -64,13 +81,18 @@ class Topic(object):
 
 
 class TopicResource(Resource):
+    """
+    /<user>/<topic>
+    """
+
     def __init__(self, service, topic):
         Resource.__init__(self)
         self.service = service
         self.topic = topic
 
     def getChild(self, name, request):
-        return UserResource(self.service, self.topic, self.service.getUser(name))
+        return UserResource(self.service, self.topic,
+                            self.service.getUser(name))
 
     def render_POST(self, request):
         self.topic.publish(request.content.read())
@@ -78,6 +100,10 @@ class TopicResource(Resource):
 
 
 class UserResource(Resource):
+    """
+    /<user>
+    """
+
     def __init__(self, service, topic, user):
         Resource.__init__(self)
         self.service = service
@@ -106,6 +132,10 @@ class UserResource(Resource):
 
 
 class RootResource(Resource):
+    """
+    /
+    """
+
     def __init__(self, service):
         Resource.__init__(self)
         self.service = service

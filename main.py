@@ -64,8 +64,9 @@ class Topic(object):
         self.subscriptions = set()
 
     def subscribe(self, user):
-        self.subscriptions.add(user)
-        user.createMailbox(self)
+        if not user in self.subscriptions:
+            self.subscriptions.add(user)
+            user.createMailbox(self)
 
     def unsubscribe(self, user):
         if not user in self.subscriptions:

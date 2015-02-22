@@ -25,6 +25,9 @@ need any kind of locking here.
 Some things left out:
 
  * topics and users are never deleted, even if they are not used anymore
- * some kind of resource control: currently it's easy to eat all memory simply by
+ * some kind of resource limits: currently it's easy to eat all memory simply by
    touching some resources (topics, users)
- * scalability (doesn't scale beyond one server)
+ * limits on mailbox length (how to handle users never reading their subscriptions)
+ * scalability (doesn't scale beyond one instance)
+ * persistence (hasn't been required)
+ * authentication (?)
